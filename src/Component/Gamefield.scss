@@ -1,0 +1,9 @@
+.Screen {
+  &_field {
+    width: 500px;
+    height: 500px;
+    border: 1px solid black;
+    display: grid;
+    grid-template: repeat(4, 1fr) / repeat(4, 1fr);
+  }
+}
