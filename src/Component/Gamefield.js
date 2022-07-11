@@ -13,8 +13,8 @@ function Gamefield({ arr }) {
     fifteenArr[order] = itemB
     fifteenArr[iSpace] = itemA
     setFifteen(fifteenArr.concat([]))
-    let result = fifteenArr.filter((item, index) => --item == index)
-    if (result.length == 16) {
+    let result = fifteenArr.filter((item, index) => --item === index)
+    if (result.length === 16) {
       setFinish(true)
     }
   }
