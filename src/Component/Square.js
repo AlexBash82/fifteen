@@ -63,6 +63,9 @@ function Square({ order, number, iSpace, drug, finish, active }) {
       case 15:
         ;(iSpace === 14 || iSpace === 11) && drug(order, iSpace)
         break
+      default:
+        console.log('check is fall down')
+        break
     }
   }
 

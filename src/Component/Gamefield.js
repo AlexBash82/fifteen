@@ -6,7 +6,7 @@ function Gamefield() {
   const [fifteen, setFifteen] = useState([])
   const [finish, setFinish] = useState(false)
   const [score, setScore] = useState(0)
-  const [bestScore, setBestScore] = useState(0)
+  const [bestScore, setBestScore] = useState(Infinity)
   const [bestScoreShow, setBestScoreShow] = useState(false)
   const refArrow = useRef([]) //запоминаем расклад
   const [active, setActive] = useState([])
@@ -40,19 +40,27 @@ function Gamefield() {
       }
     }
     refArrow.current = arrow
+    setBestScore(Infinity)
     setBestScoreShow(false)
     setFifteen(arrow)
     setISpace(arrow.indexOf(16))
     setScore(0)
+    setFinish(false)
     reAssignActive(arrow.indexOf(16))
   }
 
   function restart() {
-    let best = score >= bestScore ? score : bestScore
-    setBestScore(best)
-    setBestScoreShow(true)
+    setBestScore(() => {
+      if (finish) {
+        let best = score >= bestScore ? bestScore : score
+        return best
+      }
+      return Infinity
+    })
+    setBestScoreShow(finish ? true : false)
     setFifteen(refArrow.current)
     setScore(0)
+    setFinish(false)
     setISpace(refArrow.current.indexOf(16))
     reAssignActive(refArrow.current.indexOf(16))
   }
@@ -119,7 +127,7 @@ function Gamefield() {
     <div className="Screen">
       <button onClick={() => start()}>Start</button>
       <button onClick={() => restart()}>Restart</button>
-      <div>Score: {score}</div>
+      {score ? <div>Score: {score}</div> : false}
       {bestScoreShow && <div>Best score: {bestScore}</div>}
       <div className="Screen_field">
         {fifteen.map((item, index) => {
