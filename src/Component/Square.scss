@@ -1,5 +1,14 @@
 .Square {
   font-size: 50px;
+  background-color: antiquewhite;
+
+  &:disabled {
+    color: black;
+  }
+
+  &:enabled:hover {
+    color: rgb(131, 131, 131);
+  }
 }
 
 .greeting {

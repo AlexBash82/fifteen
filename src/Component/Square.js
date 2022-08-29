@@ -1,7 +1,7 @@
 import React from 'react'
 import './Square.scss'
 
-function Square({ order, number, fifteen, drug, finish }) {
+function Square({ order, number, iSpace, drug, finish, active }) {
   const styles = {
     button: {
       order: order,
@@ -9,7 +9,6 @@ function Square({ order, number, fifteen, drug, finish }) {
   }
 
   function check() {
-    let iSpace = fifteen.indexOf(16)
     switch (order) {
       case 0:
         ;(iSpace === 1 || iSpace === 4) && drug(order, iSpace)
@@ -69,7 +68,7 @@ function Square({ order, number, fifteen, drug, finish }) {
 
   return (
     <button
-      disabled={number === 16 ? true : false}
+      disabled={!active.includes(order)}
       className={`Square ${finish ? 'greeting' : ''}`}
       style={styles.button}
       onClick={() => check()}

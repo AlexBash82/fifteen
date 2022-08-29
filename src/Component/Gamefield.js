@@ -5,21 +5,27 @@ import Square from './Square'
 function Gamefield() {
   const [fifteen, setFifteen] = useState([])
   const [finish, setFinish] = useState(false)
-  const [steps, setSteps] = useState(0)
-  const refArrow = useRef([])
+  const [score, setScore] = useState(0)
+  const [bestScore, setBestScore] = useState(0)
+  const [bestScoreShow, setBestScoreShow] = useState(false)
+  const refArrow = useRef([]) //запоминаем расклад
+  const [active, setActive] = useState([])
+  const [iSpace, setISpace] = useState()
 
-  function drug(order, iSpace) {
+  function drug(order, indSpace) {
     let fifteenArr = fifteen.slice()
     let itemA = fifteenArr[order]
-    let itemB = fifteenArr[iSpace]
+    let itemB = fifteenArr[indSpace]
     fifteenArr[order] = itemB
-    fifteenArr[iSpace] = itemA
+    fifteenArr[indSpace] = itemA
     setFifteen(fifteenArr)
-    setSteps((prevSteps) => prevSteps + 1)
+    setISpace(fifteenArr.indexOf(16))
+    setScore((prevScore) => prevScore + 1)
     let result = fifteenArr.filter((item, index) => --item === index)
     if (result.length === 16) {
       setFinish(true)
     }
+    reAssignActive(fifteenArr.indexOf(16))
   }
 
   function start() {
@@ -28,26 +34,93 @@ function Gamefield() {
     arrow.push(random())
     while (arrow.length < 16) {
       let num = random()
-      let result = arrow.find((item) => item === num)
+      let result = arrow.includes(num)
       if (!result) {
         arrow.push(num)
       }
     }
     refArrow.current = arrow
+    setBestScoreShow(false)
     setFifteen(arrow)
-    setSteps(0)
+    setISpace(arrow.indexOf(16))
+    setScore(0)
+    reAssignActive(arrow.indexOf(16))
   }
 
   function restart() {
+    let best = score >= bestScore ? score : bestScore
+    setBestScore(best)
+    setBestScoreShow(true)
     setFifteen(refArrow.current)
-    setSteps(0)
+    setScore(0)
+    setISpace(refArrow.current.indexOf(16))
+    reAssignActive(refArrow.current.indexOf(16))
+  }
+
+  function reAssignActive(indexSpace) {
+    let arrActive = []
+    switch (indexSpace) {
+      case 0:
+        arrActive = [1, 4]
+        break
+      case 1:
+        arrActive = [0, 2, 5]
+        break
+      case 2:
+        arrActive = [1, 3, 6]
+        break
+      case 3:
+        arrActive = [2, 7]
+        break
+      case 4:
+        arrActive = [0, 5, 8]
+        break
+      case 5:
+        arrActive = [1, 4, 6, 9]
+        break
+      case 6:
+        arrActive = [2, 5, 7, 10]
+        break
+      case 7:
+        arrActive = [3, 6, 11]
+        break
+      case 8:
+        arrActive = [4, 9, 12]
+        break
+      case 9:
+        arrActive = [5, 8, 10, 13]
+        break
+      case 10:
+        arrActive = [6, 9, 11, 14]
+        break
+      case 11:
+        arrActive = [7, 10, 15]
+        break
+      case 12:
+        arrActive = [8, 13]
+        break
+      case 13:
+        arrActive = [9, 12, 14]
+        break
+      case 14:
+        arrActive = [10, 13, 15]
+        break
+      case 15:
+        arrActive = [11, 14]
+        break
+      default:
+        console.log('iSpace is not found')
+        break
+    }
+    setActive(arrActive)
   }
 
   return (
     <div className="Screen">
       <button onClick={() => start()}>Start</button>
       <button onClick={() => restart()}>Restart</button>
-      <div>Amount steps: {steps}</div>
+      <div>Score: {score}</div>
+      {bestScoreShow && <div>Best score: {bestScore}</div>}
       <div className="Screen_field">
         {fifteen.map((item, index) => {
           return (
@@ -55,9 +128,10 @@ function Gamefield() {
               key={index}
               order={index}
               number={item}
-              fifteen={fifteen}
+              iSpace={iSpace}
               drug={drug}
               finish={finish}
+              active={active}
             />
           )
         })}
