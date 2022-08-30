@@ -1,16 +1,26 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  drugChips,
+  setActive,
+  setSpace,
+  setFifteenMemo,
+  complete,
+  unComplete,
+} from '../redux/actions'
 import './Gamefield.scss'
 import Square from './Square'
 
 function Gamefield() {
-  const [fifteen, setFifteen] = useState([])
-  const [finish, setFinish] = useState(false)
+  const dispatch = useDispatch()
+  const fifteen = useSelector((state) => state.move.fifteen)
+  const fifteenMemo = useSelector((state) => state.move.fifteenMemo)
+  const completed = useSelector((state) => state.result.completed)
+
+  //const [finish, setFinish] = useState(false)
   const [score, setScore] = useState(0)
   const [bestScore, setBestScore] = useState(Infinity)
   const [bestScoreShow, setBestScoreShow] = useState(false)
-  const refArrow = useRef([]) //запоминаем расклад
-  const [active, setActive] = useState([])
-  const [iSpace, setISpace] = useState()
 
   function drug(order, indSpace) {
     let fifteenArr = fifteen.slice()
@@ -18,12 +28,17 @@ function Gamefield() {
     let itemB = fifteenArr[indSpace]
     fifteenArr[order] = itemB
     fifteenArr[indSpace] = itemA
-    setFifteen(fifteenArr)
-    setISpace(fifteenArr.indexOf(16))
-    setScore((prevScore) => prevScore + 1)
-    let result = fifteenArr.filter((item, index) => --item === index)
-    setFinish(result.length === 16 ? true : false)
+    dispatch(drugChips(fifteenArr))
+    dispatch(setSpace(fifteenArr.indexOf(16)))
     reAssignActive(fifteenArr.indexOf(16))
+    let result = fifteenArr.filter((item, index) => --item === index)
+    if (result.length === 16) {
+      dispatch(complete())
+    }
+
+    setScore((prevScore) => prevScore + 1)
+
+    //setFinish(result.length === 16 ? true : false)
   }
 
   function start() {
@@ -37,30 +52,40 @@ function Gamefield() {
         arrow.push(num)
       }
     }
-    refArrow.current = arrow
+
+    dispatch(drugChips(arrow))
+    dispatch(setFifteenMemo(arrow))
+    dispatch(setSpace(arrow.indexOf(16)))
+    reAssignActive(arrow.indexOf(16))
+    if (completed) {
+      dispatch(unComplete())
+    }
+
     setBestScore(Infinity)
     setBestScoreShow(false)
-    setFifteen(arrow)
-    setISpace(arrow.indexOf(16))
     setScore(0)
-    setFinish(false)
-    reAssignActive(arrow.indexOf(16))
+    //setFinish(false)
   }
 
   function restart() {
     setBestScore(() => {
-      if (finish) {
+      if (completed) {
         let best = score >= bestScore ? bestScore : score
         return best
       }
       return Infinity
     })
-    setBestScoreShow(finish ? true : false)
-    setFifteen(refArrow.current)
+    setBestScoreShow(completed ? true : false)
     setScore(0)
-    setFinish(false)
-    setISpace(refArrow.current.indexOf(16))
-    reAssignActive(refArrow.current.indexOf(16))
+
+    dispatch(drugChips(fifteenMemo))
+    dispatch(setSpace(fifteenMemo.indexOf(16)))
+    reAssignActive(fifteenMemo.indexOf(16))
+    if (completed) {
+      dispatch(unComplete())
+    }
+
+    //setFinish(false)
   }
 
   function reAssignActive(indexSpace) {
@@ -118,27 +143,19 @@ function Gamefield() {
         console.log('iSpace is not found')
         break
     }
-    setActive(arrActive)
+    dispatch(setActive(arrActive))
   }
 
   return (
     <div className="Screen">
       <div className="Screen_field">
-        {finish ? (
+        {completed ? (
           <div className="Screen_field_congratulate">Congratulate</div>
         ) : (
           <div className="Screen_field_chips">
             {fifteen.map((item, index) => {
               return (
-                <Square
-                  key={index}
-                  order={index}
-                  number={item}
-                  iSpace={iSpace}
-                  drug={drug}
-                  finish={finish}
-                  active={active}
-                />
+                <Square key={index} order={index} number={item} drug={drug} />
               )
             })}
           </div>

@@ -1,12 +1,16 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import './Square.scss'
 
-function Square({ order, number, iSpace, drug, finish, active }) {
+function Square({ order, number, drug }) {
   const styles = {
     button: {
-      order: order,
+      order,
     },
   }
+  const iSpace = useSelector((state) => state.move.space)
+  const active = useSelector((state) => state.move.active)
+  const completed = useSelector((state) => state.result.completed)
 
   function check() {
     switch (order) {
@@ -72,7 +76,7 @@ function Square({ order, number, iSpace, drug, finish, active }) {
   return (
     <button
       disabled={!active.includes(order)}
-      className={`Square ${finish ? 'greeting' : ''}`}
+      className={`Square ${completed ? 'greeting' : ''}`}
       style={styles.button}
       onClick={() => check()}
     >

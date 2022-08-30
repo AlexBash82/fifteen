@@ -1,4 +1,4 @@
-import Gamefield from './Component/Gamefield'
+import Gamefield from './Components/Gamefield'
 
 function App() {
   return <Gamefield />
