@@ -22,9 +22,7 @@ function Gamefield() {
     setISpace(fifteenArr.indexOf(16))
     setScore((prevScore) => prevScore + 1)
     let result = fifteenArr.filter((item, index) => --item === index)
-    if (result.length === 16) {
-      setFinish(true)
-    }
+    setFinish(result.length === 16 ? true : false)
     reAssignActive(fifteenArr.indexOf(16))
   }
 
@@ -125,24 +123,48 @@ function Gamefield() {
 
   return (
     <div className="Screen">
-      <button onClick={() => start()}>Start</button>
-      <button onClick={() => restart()}>Restart</button>
-      {score ? <div>Score: {score}</div> : false}
-      {bestScoreShow && <div>Best score: {bestScore}</div>}
       <div className="Screen_field">
-        {fifteen.map((item, index) => {
-          return (
-            <Square
-              key={index}
-              order={index}
-              number={item}
-              iSpace={iSpace}
-              drug={drug}
-              finish={finish}
-              active={active}
-            />
-          )
-        })}
+        {finish ? (
+          <div className="Screen_field_congratulate">Congratulate</div>
+        ) : (
+          <div className="Screen_field_chips">
+            {fifteen.map((item, index) => {
+              return (
+                <Square
+                  key={index}
+                  order={index}
+                  number={item}
+                  iSpace={iSpace}
+                  drug={drug}
+                  finish={finish}
+                  active={active}
+                />
+              )
+            })}
+          </div>
+        )}
+      </div>
+      <div className="Screen_dashboard">
+        <div className="Screen_dashboard_buttons">
+          <button
+            className="Screen_dashboard_buttons_button"
+            onClick={() => start()}
+          >
+            Start
+          </button>
+          <button
+            className="Screen_dashboard_buttons_button"
+            onClick={() => restart()}
+          >
+            Restart
+          </button>
+        </div>
+
+        <div className="Screen_dashboard_score">Score: {score}</div>
+
+        {bestScoreShow && (
+          <div className="Screen_dashboard_score">Best score: {bestScore}</div>
+        )}
       </div>
     </div>
   )

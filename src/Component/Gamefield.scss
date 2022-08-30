@@ -1,9 +1,47 @@
 .Screen {
+  display: flex;
+  justify-content: center;
+
   &_field {
-    width: 500px;
-    height: 500px;
+    box-sizing: content-box;
+
     border: 2px solid black;
-    display: grid;
-    grid-template: repeat(4, 1fr) / repeat(4, 1fr);
+
+    &_chips {
+      width: 400px;
+      height: 400px;
+      display: grid;
+      grid-template: repeat(4, 1fr) / repeat(4, 1fr);
+    }
+
+    &_congratulate {
+      width: 400px;
+      height: 400px;
+      text-align: center;
+      font-size: 50px;
+      color: red;
+    }
+  }
+
+  &_dashboard {
+    width: 400px;
+    height: 400px;
+
+    &_buttons {
+      width: 400px;
+      height: 100px;
+
+      &_button {
+        width: 200px;
+        height: 100px;
+        font-size: 50px;
+      }
+    }
+
+    &_score {
+      width: 400px;
+      height: 100px;
+      font-size: 50px;
+    }
   }
 }
