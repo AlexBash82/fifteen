@@ -10,7 +10,6 @@ function Square({ order, number, drug }) {
   }
   const iSpace = useSelector((state) => state.move.space)
   const active = useSelector((state) => state.move.active)
-  const completed = useSelector((state) => state.result.completed)
 
   function check() {
     switch (order) {
@@ -76,7 +75,7 @@ function Square({ order, number, drug }) {
   return (
     <button
       disabled={!active.includes(order)}
-      className={`Square ${completed ? 'greeting' : ''}`}
+      className={`Square ${number === 16 ? 'empty' : ''}`}
       style={styles.button}
       onClick={() => check()}
     >

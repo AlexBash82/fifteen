@@ -1,11 +1,17 @@
 .Screen {
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
+  align-items: center;
+  background-color: gray;
+  gap: 20px;
 
   &_field {
-    box-sizing: content-box;
-
     border: 2px solid black;
+    box-sizing: content-box;
+    width: 400px;
+    height: 400px;
 
     &_chips {
       width: 400px;
@@ -42,6 +48,8 @@
       width: 400px;
       height: 100px;
       font-size: 50px;
+      padding-top: 20px;
+      padding-left: 15px;
     }
   }
 }

@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-  drugChips,
-  setActive,
-  setSpace,
   setFifteenMemo,
-  complete,
-  unComplete,
+  // complete,
+  // unComplete,
+  reAssignChips,
 } from '../redux/actions'
 import './Gamefield.scss'
 import Square from './Square'
@@ -15,9 +13,8 @@ function Gamefield() {
   const dispatch = useDispatch()
   const fifteen = useSelector((state) => state.move.fifteen)
   const fifteenMemo = useSelector((state) => state.move.fifteenMemo)
-  const completed = useSelector((state) => state.result.completed)
+  const completed = useSelector((state) => state.move.complete)
 
-  //const [finish, setFinish] = useState(false)
   const [score, setScore] = useState(0)
   const [bestScore, setBestScore] = useState(Infinity)
   const [bestScoreShow, setBestScoreShow] = useState(false)
@@ -28,17 +25,10 @@ function Gamefield() {
     let itemB = fifteenArr[indSpace]
     fifteenArr[order] = itemB
     fifteenArr[indSpace] = itemA
-    dispatch(drugChips(fifteenArr))
-    dispatch(setSpace(fifteenArr.indexOf(16)))
-    reAssignActive(fifteenArr.indexOf(16))
-    let result = fifteenArr.filter((item, index) => --item === index)
-    if (result.length === 16) {
-      dispatch(complete())
-    }
+
+    reAssign(fifteenArr)
 
     setScore((prevScore) => prevScore + 1)
-
-    //setFinish(result.length === 16 ? true : false)
   }
 
   function start() {
@@ -53,18 +43,12 @@ function Gamefield() {
       }
     }
 
-    dispatch(drugChips(arrow))
+    reAssign(arrow)
     dispatch(setFifteenMemo(arrow))
-    dispatch(setSpace(arrow.indexOf(16)))
-    reAssignActive(arrow.indexOf(16))
-    if (completed) {
-      dispatch(unComplete())
-    }
 
     setBestScore(Infinity)
     setBestScoreShow(false)
     setScore(0)
-    //setFinish(false)
   }
 
   function restart() {
@@ -78,72 +62,75 @@ function Gamefield() {
     setBestScoreShow(completed ? true : false)
     setScore(0)
 
-    dispatch(drugChips(fifteenMemo))
-    dispatch(setSpace(fifteenMemo.indexOf(16)))
-    reAssignActive(fifteenMemo.indexOf(16))
-    if (completed) {
-      dispatch(unComplete())
-    }
-
-    //setFinish(false)
+    reAssign(fifteenMemo)
   }
 
-  function reAssignActive(indexSpace) {
-    let arrActive = []
+  function reAssign(arrowChips) {
+    const indexSpace = arrowChips.indexOf(16)
+    let arrowActive = []
     switch (indexSpace) {
       case 0:
-        arrActive = [1, 4]
+        arrowActive = [1, 4]
         break
       case 1:
-        arrActive = [0, 2, 5]
+        arrowActive = [0, 2, 5]
         break
       case 2:
-        arrActive = [1, 3, 6]
+        arrowActive = [1, 3, 6]
         break
       case 3:
-        arrActive = [2, 7]
+        arrowActive = [2, 7]
         break
       case 4:
-        arrActive = [0, 5, 8]
+        arrowActive = [0, 5, 8]
         break
       case 5:
-        arrActive = [1, 4, 6, 9]
+        arrowActive = [1, 4, 6, 9]
         break
       case 6:
-        arrActive = [2, 5, 7, 10]
+        arrowActive = [2, 5, 7, 10]
         break
       case 7:
-        arrActive = [3, 6, 11]
+        arrowActive = [3, 6, 11]
         break
       case 8:
-        arrActive = [4, 9, 12]
+        arrowActive = [4, 9, 12]
         break
       case 9:
-        arrActive = [5, 8, 10, 13]
+        arrowActive = [5, 8, 10, 13]
         break
       case 10:
-        arrActive = [6, 9, 11, 14]
+        arrowActive = [6, 9, 11, 14]
         break
       case 11:
-        arrActive = [7, 10, 15]
+        arrowActive = [7, 10, 15]
         break
       case 12:
-        arrActive = [8, 13]
+        arrowActive = [8, 13]
         break
       case 13:
-        arrActive = [9, 12, 14]
+        arrowActive = [9, 12, 14]
         break
       case 14:
-        arrActive = [10, 13, 15]
+        arrowActive = [10, 13, 15]
         break
       case 15:
-        arrActive = [11, 14]
+        arrowActive = [11, 14]
         break
       default:
         console.log('iSpace is not found')
         break
     }
-    dispatch(setActive(arrActive))
+
+    const result = arrowChips.filter((item, index) => --item === index)
+    let complete
+    if (result.length === 16) {
+      complete = true
+    } else {
+      complete = false
+    }
+
+    dispatch(reAssignChips(arrowChips, arrowActive, indexSpace, complete))
   }
 
   return (
@@ -172,6 +159,7 @@ function Gamefield() {
           <button
             className="Screen_dashboard_buttons_button"
             onClick={() => restart()}
+            disabled={!score}
           >
             Restart
           </button>
