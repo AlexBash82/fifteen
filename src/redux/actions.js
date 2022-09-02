@@ -1,4 +1,11 @@
-import { REASSIGN_CHIPS, SET_FIFTEEN_MEMO, SET_SCORE } from './types'
+import {
+  HIDE_BESTSCORE,
+  REASSIGN_CHIPS,
+  SET_BESTSCORE,
+  SET_FIFTEEN_MEMO,
+  SET_SCORE,
+  SHOW_BESTSCORE,
+} from './types'
 
 export function reAssignChips(arrowChips, arrowActive, indexSpace, complete) {
   return {
@@ -21,5 +28,24 @@ export function setScore(number) {
   return {
     type: SET_SCORE,
     payload: number,
+  }
+}
+
+export function setBestScore(number) {
+  return {
+    type: SET_BESTSCORE,
+    payload: number,
+  }
+}
+
+export function showBestScore() {
+  return {
+    type: SHOW_BESTSCORE,
+  }
+}
+
+export function hideBestScore() {
+  return {
+    type: HIDE_BESTSCORE,
   }
 }

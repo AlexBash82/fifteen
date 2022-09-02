@@ -1,6 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setFifteenMemo, setScore } from '../redux/actions'
+import {
+  setFifteenMemo,
+  setScore,
+  setBestScore,
+  showBestScore,
+  hideBestScore,
+} from '../redux/actions'
 import useReAssign from '../customHook/useReAssign'
 import './Gamefield.scss'
 import Square from './Square'
@@ -11,10 +17,9 @@ function Gamefield() {
   const fifteenMemo = useSelector((state) => state.move.fifteenMemo)
   const completed = useSelector((state) => state.move.complete)
   const score = useSelector((state) => state.result.score)
+  const bestScore = useSelector((state) => state.result.bestScore)
+  const existBestScore = useSelector((state) => state.result.existBestScore)
   const reAssign = useReAssign()
-
-  const [bestScore, setBestScore] = useState(Infinity)
-  const [bestScoreShow, setBestScoreShow] = useState(false)
 
   function start() {
     let arrow = []
@@ -27,25 +32,19 @@ function Gamefield() {
         arrow.push(num)
       }
     }
-
     reAssign(arrow)
     dispatch(setFifteenMemo(arrow))
     dispatch(setScore(0))
-
-    setBestScore(Infinity)
-    setBestScoreShow(false)
+    dispatch(setBestScore(Infinity))
+    dispatch(hideBestScore())
   }
 
   function restart() {
-    setBestScore(() => {
-      if (completed) {
-        let best = score >= bestScore ? bestScore : score
-        return best
-      }
-      return Infinity
-    })
-    setBestScoreShow(completed ? true : false)
-
+    if (completed) {
+      let best = score >= bestScore ? bestScore : score
+      dispatch(setBestScore(best))
+      dispatch(showBestScore())
+    }
     dispatch(setScore(0))
     reAssign(fifteenMemo)
   }
@@ -82,7 +81,7 @@ function Gamefield() {
 
         <div className="Screen_dashboard_score">Score: {score}</div>
 
-        {bestScoreShow && (
+        {existBestScore && (
           <div className="Screen_dashboard_score">Best score: {bestScore}</div>
         )}
       </div>
