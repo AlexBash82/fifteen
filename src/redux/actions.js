@@ -1,9 +1,4 @@
-import {
-  REASSIGN_CHIPS,
-  SET_FIFTEEN_MEMO,
-  // COMPLETED,
-  // NOT_COMPLETED,
-} from './types'
+import { REASSIGN_CHIPS, SET_FIFTEEN_MEMO, SET_SCORE } from './types'
 
 export function reAssignChips(arrowChips, arrowActive, indexSpace, complete) {
   return {
@@ -22,14 +17,9 @@ export function setFifteenMemo(arrow) {
   }
 }
 
-// export function complete() {
-//   return {
-//     type: COMPLETED,
-//   }
-// }
-
-// export function unComplete() {
-//   return {
-//     type: NOT_COMPLETED,
-//   }
-// }
+export function setScore(number) {
+  return {
+    type: SET_SCORE,
+    payload: number,
+  }
+}

@@ -1,15 +1,21 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { setScore } from '../redux/actions'
+import useReAssign from '../customHook/useReAssign'
 import './Square.scss'
 
-function Square({ order, number, drug }) {
+function Square({ order, number }) {
   const styles = {
     button: {
       order,
     },
   }
+  const dispatch = useDispatch()
+  const fifteen = useSelector((state) => state.move.fifteen)
+  const score = useSelector((state) => state.result.score)
   const iSpace = useSelector((state) => state.move.space)
   const active = useSelector((state) => state.move.active)
+  const reAssign = useReAssign()
 
   function check() {
     switch (order) {
@@ -70,6 +76,17 @@ function Square({ order, number, drug }) {
         console.log('check is fall down')
         break
     }
+  }
+
+  function drug(order, indSpace) {
+    let fifteenArr = fifteen.slice()
+    let itemA = fifteenArr[order]
+    let itemB = fifteenArr[indSpace]
+    fifteenArr[order] = itemB
+    fifteenArr[indSpace] = itemA
+
+    reAssign(fifteenArr)
+    dispatch(setScore(score + 1))
   }
 
   return (
