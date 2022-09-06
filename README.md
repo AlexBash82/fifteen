@@ -1,15 +1,20 @@
-# The game "[FIFTEEN](https://alexbash82.github.io/fifteen/)"
+# The game "[FIFTEEN](https://alexbash82.github.io/fifteen/)"  
+
+Детская логическая игра "Пятнашки", цель которой выстроить фишки по порядку.  
+Pet-project, основной целю которого является демонстрация работы с библиотекой Redux.  
+Посмотреть игру в деле можно, перейдя по этой [ссылке](https://alexbash82.github.io/fifteen/)
+*** 
 
 ## При написании игры использованы следующие технологии:
 
-язык - JavaScript,
++ язык - JavaScript,
 
-библиотека - React,
++ библиотека - React,
 
-препроцессор - SASS,
++ препроцессор - SASS,
 
-библиотека - Redux,
++ библиотека - Redux,
 
-наборы свойств - Flex, Grid,
++ наборы свойств - Flex, Grid,
 
-кастомный hook - useReAssign()
++ кастомный hook - useReAssign()
