@@ -1,17 +1,22 @@
 .Square {
-  font-size: 50px;
+  font-size: 2em;
   background-color: antiquewhite;
+  border: 1px solid black;
+  border-radius: 3px;
 
   &:disabled {
     color: black;
   }
 
-  &:enabled:hover {
+  &:hover:enabled {
     color: rgb(131, 131, 131);
+    text-shadow: 1px 1px 2px black, -1px 1px 2px black, 1px -1px 2px black,
+      -1px -1px 2px black;
+    font-size: 1.8em;
   }
 }
 
 .empty {
-  background-color: rgba(250, 235, 215, 0.26);
+  background-color: rgba(255, 255, 255, 0);
   border-style: none;
 }

@@ -52,15 +52,15 @@ function Gamefield() {
   return (
     <div className="Screen">
       <div className="Screen_field">
-        {completed ? (
-          <div className="Screen_field_congratulate">Congratulate</div>
-        ) : (
-          <div className="Screen_field_chips">
-            {fifteen.map((item, index) => {
-              return <Square key={item} order={index} number={item} />
-            })}
-          </div>
+        {completed && (
+          <div className="Screen_field_congratulate">Поздравляем!!!</div>
         )}
+
+        <div className="Screen_field_chips">
+          {fifteen.map((item, index) => {
+            return <Square key={item} order={index} number={item} />
+          })}
+        </div>
       </div>
       <div className="Screen_dashboard">
         <div className="Screen_dashboard_buttons">
@@ -68,21 +68,21 @@ function Gamefield() {
             className="Screen_dashboard_buttons_button"
             onClick={() => start()}
           >
-            Start
+            Старт
           </button>
           <button
             className="Screen_dashboard_buttons_button"
             onClick={() => restart()}
             disabled={!score}
           >
-            Restart
+            Заново
           </button>
         </div>
 
-        <div className="Screen_dashboard_score">Score: {score}</div>
+        <div className="Screen_dashboard_score">Счет: {score}</div>
 
         {existBestScore && (
-          <div className="Screen_dashboard_score">Best score: {bestScore}</div>
+          <div className="Screen_dashboard_score">Бэст: {bestScore}</div>
         )}
       </div>
     </div>

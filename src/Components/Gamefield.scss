@@ -6,50 +6,88 @@
   align-items: center;
   background-color: gray;
   gap: 20px;
+  font-size: 25px;
 
   &_field {
+    margin: 1em 0;
+    position: relative;
     border: 2px solid black;
     box-sizing: content-box;
-    width: 400px;
-    height: 400px;
+    width: 16em;
+    height: 16em;
 
     &_chips {
-      width: 400px;
-      height: 400px;
+      width: 16em;
+      height: 16em;
       display: grid;
       grid-template: repeat(4, 1fr) / repeat(4, 1fr);
     }
 
     &_congratulate {
-      width: 400px;
-      height: 400px;
-      text-align: center;
-      font-size: 50px;
-      color: red;
+      position: absolute;
+      top: 6.72em;
+      left: 0.5em;
+      font-size: 2em;
+      color: rgba(251, 255, 0, 0.788);
+      text-shadow: 1px 1px 5px red, -1px 1px 5px red, 1px -1px 5px red,
+        -1px -1px 5px red;
     }
   }
 
   &_dashboard {
-    width: 400px;
-    height: 400px;
+    width: 16em;
+    height: 16em;
 
     &_buttons {
-      width: 400px;
-      height: 100px;
-
       &_button {
-        width: 200px;
-        height: 100px;
-        font-size: 50px;
+        width: 4em;
+        height: 2em;
+        font-size: 2em;
       }
     }
 
     &_score {
-      width: 400px;
-      height: 100px;
-      font-size: 50px;
-      padding-top: 20px;
-      padding-left: 15px;
+      width: 8em;
+      height: 2em;
+      font-size: 2em;
+      line-height: 2em;
     }
+  }
+}
+
+@media all and (max-width: 880px) {
+  .Screen_dashboard {
+    width: 8em;
+    &_buttons {
+      display: flex;
+      flex-flow: wrap;
+    }
+  }
+}
+
+@media all and (max-width: 690px) {
+  .Screen {
+    flex-direction: column;
+
+    &_field {
+      margin-top: 2em;
+    }
+
+    &_dashboard {
+      width: 16em;
+      height: 12em;
+    }
+  }
+}
+
+@media all and (max-width: 510px) {
+  .Screen {
+    font-size: 20px;
+  }
+}
+
+@media all and (max-width: 360px) {
+  .Screen {
+    font-size: 15px;
   }
 }

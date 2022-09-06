@@ -15,6 +15,7 @@ function Square({ order, number }) {
   const score = useSelector((state) => state.result.score)
   const iSpace = useSelector((state) => state.move.space)
   const active = useSelector((state) => state.move.active)
+  const completed = useSelector((state) => state.move.complete)
   const reAssign = useReAssign()
 
   function check() {
@@ -91,7 +92,7 @@ function Square({ order, number }) {
 
   return (
     <button
-      disabled={!active.includes(order)}
+      disabled={!active.includes(order) || completed}
       className={`Square ${number === 16 ? 'empty' : ''}`}
       style={styles.button}
       onClick={() => check()}
