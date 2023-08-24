@@ -6,22 +6,23 @@ import {
   setBestScore,
   showBestScore,
   hideBestScore,
+  reAssignChips,
 } from '../redux/actions'
-import useReAssign from '../customHook/useReAssign'
+import { reAssign } from '../reAssign/reAssign'
 import './Gamefield.scss'
 import Square from './Square'
 
 function Gamefield() {
   const dispatch = useDispatch()
-  const fifteen = useSelector((state) => state.move.fifteen)
-  const fifteenMemo = useSelector((state) => state.move.fifteenMemo)
-  const completed = useSelector((state) => state.move.complete)
-  const score = useSelector((state) => state.result.score)
-  const bestScore = useSelector((state) => state.result.bestScore)
-  const existBestScore = useSelector((state) => state.result.existBestScore)
-  const reAssign = useReAssign()
+  const { fifteen, active, space, fifteenMemo, completed } = useSelector(
+    (state) => state.move
+  )
+  const { score, bestScore, existBestScore } = useSelector(
+    (state) => state.result
+  )
 
   function start() {
+    //логика создания порядка фишек (случайный вариант)
     let arrow = []
     let random = () => Math.floor(1 + Math.random() * 16)
     arrow.push(random())
@@ -32,7 +33,9 @@ function Gamefield() {
         arrow.push(num)
       }
     }
-    reAssign(arrow)
+
+    const [arrowChips, arrowActive, indexSpace, complete] = reAssign(arrow)
+    dispatch(reAssignChips(arrowChips, arrowActive, indexSpace, complete))
     dispatch(setFifteenMemo(arrow))
     dispatch(setScore(0))
     dispatch(setBestScore(Infinity))

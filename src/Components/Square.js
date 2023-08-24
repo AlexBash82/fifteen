@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setScore } from '../redux/actions'
-import useReAssign from '../customHook/useReAssign'
+import { reAssignChips, setScore } from '../redux/actions'
+import { reAssign } from '../reAssign/reAssign'
 import './Square.scss'
 
 function Square({ order, number }) {
@@ -16,7 +16,6 @@ function Square({ order, number }) {
   const iSpace = useSelector((state) => state.move.space)
   const active = useSelector((state) => state.move.active)
   const completed = useSelector((state) => state.move.complete)
-  const reAssign = useReAssign()
 
   function check() {
     switch (order) {
@@ -86,7 +85,8 @@ function Square({ order, number }) {
     fifteenArr[order] = itemB
     fifteenArr[indSpace] = itemA
 
-    reAssign(fifteenArr)
+    const [arrowChips, arrowActive, indexSpace, complete] = reAssign(fifteenArr)
+    dispatch(reAssignChips(arrowChips, arrowActive, indexSpace, complete))
     dispatch(setScore(score + 1))
   }
 
