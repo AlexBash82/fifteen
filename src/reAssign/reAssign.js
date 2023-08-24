@@ -63,5 +63,5 @@ export const reAssign = (arrowChips) => {
     complete = false
   }
 
-  return [arrowChips, arrowActive, indexSpace, complete]
+  return [arrowActive, indexSpace, complete]
 }

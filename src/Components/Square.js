@@ -85,8 +85,8 @@ function Square({ order, number }) {
     fifteenArr[order] = itemB
     fifteenArr[indSpace] = itemA
 
-    const [arrowChips, arrowActive, indexSpace, complete] = reAssign(fifteenArr)
-    dispatch(reAssignChips(arrowChips, arrowActive, indexSpace, complete))
+    const [arrowActive, indexSpace, complete] = reAssign(fifteenArr)
+    dispatch(reAssignChips(fifteenArr, arrowActive, indexSpace, complete))
     dispatch(setScore(score + 1))
   }
 

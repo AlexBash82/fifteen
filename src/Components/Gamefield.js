@@ -34,8 +34,8 @@ function Gamefield() {
       }
     }
 
-    const [arrowChips, arrowActive, indexSpace, complete] = reAssign(arrow)
-    dispatch(reAssignChips(arrowChips, arrowActive, indexSpace, complete))
+    const [arrowActive, indexSpace, complete] = reAssign(arrow)
+    dispatch(reAssignChips(arrow, arrowActive, indexSpace, complete))
     dispatch(setFifteenMemo(arrow))
     dispatch(setScore(0))
     dispatch(setBestScore(Infinity))
@@ -49,7 +49,8 @@ function Gamefield() {
       dispatch(showBestScore())
     }
     dispatch(setScore(0))
-    reAssign(fifteenMemo)
+    const [arrowActive, indexSpace, complete] = reAssign(fifteenMemo)
+    dispatch(reAssignChips(fifteenMemo, arrowActive, indexSpace, complete))
   }
 
   return (
