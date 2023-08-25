@@ -1,4 +1,4 @@
-export const reAssign = (arrowChips) => {
+export const checkChips = (arrowChips) => {
   const indexSpace = arrowChips.indexOf(16)
   let arrowActive = []
   switch (indexSpace) {
@@ -56,12 +56,12 @@ export const reAssign = (arrowChips) => {
   }
 
   const result = arrowChips.filter((item, index) => --item === index)
-  let complete
+  let completed
   if (result.length === 16) {
-    complete = true
+    completed = true
   } else {
-    complete = false
+    completed = false
   }
 
-  return [arrowActive, indexSpace, complete]
+  return [arrowActive, indexSpace, completed]
 }

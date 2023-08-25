@@ -7,13 +7,13 @@ import {
   SHOW_BESTSCORE,
 } from './types'
 
-export function reAssignChips(arrowChips, arrowActive, indexSpace, complete) {
+export function reAssignChips(arrowChips, arrowActive, indexSpace, completed) {
   return {
     type: REASSIGN_CHIPS,
     payloadChips: arrowChips,
     payloadActive: arrowActive,
     payloadSpace: indexSpace,
-    payloadComplete: complete,
+    payloadComplete: completed,
   }
 }
 

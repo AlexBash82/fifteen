@@ -8,13 +8,14 @@ import {
   hideBestScore,
   reAssignChips,
 } from '../redux/actions'
-import { reAssign } from '../reAssign/reAssign'
+import { checkChips } from '../fieldSerivce/checkChips'
 import './Gamefield.scss'
 import Square from './Square'
+import { drugChips } from '../fieldSerivce/drugChips'
 
 function Gamefield() {
   const dispatch = useDispatch()
-  const { fifteen, active, space, fifteenMemo, completed } = useSelector(
+  const { fifteen, iSpace, fifteenMemo, completed } = useSelector(
     (state) => state.move
   )
   const { score, bestScore, existBestScore } = useSelector(
@@ -22,35 +23,41 @@ function Gamefield() {
   )
 
   function start() {
-    //логика создания порядка фишек (случайный вариант)
-    let arrow = []
-    let random = () => Math.floor(1 + Math.random() * 16)
-    arrow.push(random())
-    while (arrow.length < 16) {
-      let num = random()
-      let result = arrow.includes(num)
-      if (!result) {
-        arrow.push(num)
-      }
+    const reduce = (arrowActive, prevSpace) => {
+      return arrowActive.filter((item) => item !== prevSpace)
     }
 
-    const [arrowActive, indexSpace, complete] = reAssign(arrow)
-    dispatch(reAssignChips(arrow, arrowActive, indexSpace, complete))
-    dispatch(setFifteenMemo(arrow))
+    let fifteenArrow = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    let prevSpace = iSpace
+
+    for (let i = 0; i < 200; i++) {
+      const [arrowActive, indexSpace] = checkChips(fifteenArrow)
+      const nextMoveArr = reduce(arrowActive, prevSpace)
+      let nextMoveArrInd = Math.floor(Math.random() * nextMoveArr.length)
+      let nextMoveInd = nextMoveArr[nextMoveArrInd]
+      let newFifteenArrow = drugChips(fifteenArrow, nextMoveInd, indexSpace)
+      fifteenArrow = newFifteenArrow
+      prevSpace = nextMoveInd
+    }
+
+    const [arrowActive, indexSpace, completed] = checkChips(fifteenArrow)
+    dispatch(reAssignChips(fifteenArrow, arrowActive, indexSpace, completed))
+    dispatch(setFifteenMemo(fifteenArrow))
     dispatch(setScore(0))
     dispatch(setBestScore(Infinity))
     dispatch(hideBestScore())
   }
 
-  function restart() {
-    if (completed) {
+  function restart(isOver) {
+    if (isOver) {
       let best = score >= bestScore ? bestScore : score
       dispatch(setBestScore(best))
       dispatch(showBestScore())
     }
     dispatch(setScore(0))
-    const [arrowActive, indexSpace, complete] = reAssign(fifteenMemo)
-    dispatch(reAssignChips(fifteenMemo, arrowActive, indexSpace, complete))
+    const [arrowActive, indexSpace, completed] = checkChips(fifteenMemo)
+    console.log('completed = ', completed)
+    dispatch(reAssignChips(fifteenMemo, arrowActive, indexSpace, completed))
   }
 
   return (
@@ -76,7 +83,7 @@ function Gamefield() {
           </button>
           <button
             className="Screen_dashboard_buttons_button"
-            onClick={() => restart()}
+            onClick={() => restart(completed)}
             disabled={!score}
           >
             Заново
