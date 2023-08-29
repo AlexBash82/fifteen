@@ -25,12 +25,13 @@
 
     &_congratulate {
       position: absolute;
-      top: 6.72em;
+      top: 3em;
       left: 0.5em;
       font-size: 2em;
       color: rgba(251, 255, 0, 0.788);
       text-shadow: 1px 1px 5px red, -1px 1px 5px red, 1px -1px 5px red,
         -1px -1px 5px red;
+      z-index: 200;
     }
   }
 

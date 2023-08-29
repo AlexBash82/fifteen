@@ -8,7 +8,7 @@ import {
   hideBestScore,
   reAssignChips,
 } from '../redux/actions'
-import { checkChips } from '../fieldSerivce/checkChips'
+import { findActiveChips } from '../fieldSerivce/findActiveChips'
 import './Gamefield.scss'
 import Square from './Square'
 import { drugChips } from '../fieldSerivce/drugChips'
@@ -23,26 +23,26 @@ function Gamefield() {
   )
 
   function start() {
-    const reduce = (arrowActive, prevSpace) => {
-      return arrowActive.filter((item) => item !== prevSpace)
+    const reduce = (arrayActive, prevSpace) => {
+      return arrayActive.filter((item) => item !== prevSpace)
     }
 
-    let fifteenArrow = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    let fifteenArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     let prevSpace = iSpace
 
     for (let i = 0; i < 200; i++) {
-      const [arrowActive, indexSpace] = checkChips(fifteenArrow)
-      const nextMoveArr = reduce(arrowActive, prevSpace)
+      const [arrayActive, indexSpace] = findActiveChips(fifteenArray)
+      const nextMoveArr = reduce(arrayActive, prevSpace)
       let nextMoveArrInd = Math.floor(Math.random() * nextMoveArr.length)
       let nextMoveInd = nextMoveArr[nextMoveArrInd]
-      let newFifteenArrow = drugChips(fifteenArrow, nextMoveInd, indexSpace)
-      fifteenArrow = newFifteenArrow
+      let newFifteenArray = drugChips(fifteenArray, nextMoveInd, indexSpace)
+      fifteenArray = newFifteenArray
       prevSpace = nextMoveInd
     }
 
-    const [arrowActive, indexSpace, completed] = checkChips(fifteenArrow)
-    dispatch(reAssignChips(fifteenArrow, arrowActive, indexSpace, completed))
-    dispatch(setFifteenMemo(fifteenArrow))
+    const [arrayActive, indexSpace, completed] = findActiveChips(fifteenArray)
+    dispatch(reAssignChips(fifteenArray, arrayActive, indexSpace, completed))
+    dispatch(setFifteenMemo(fifteenArray))
     dispatch(setScore(0))
     dispatch(setBestScore(Infinity))
     dispatch(hideBestScore())
@@ -55,9 +55,9 @@ function Gamefield() {
       dispatch(showBestScore())
     }
     dispatch(setScore(0))
-    const [arrowActive, indexSpace, completed] = checkChips(fifteenMemo)
+    const [arrayActive, indexSpace, completed] = findActiveChips(fifteenMemo)
     console.log('completed = ', completed)
-    dispatch(reAssignChips(fifteenMemo, arrowActive, indexSpace, completed))
+    dispatch(reAssignChips(fifteenMemo, arrayActive, indexSpace, completed))
   }
 
   return (
